@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up Form</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="formcontainer">
+        <h1>Please Sign Up</h1>
+        <form id="form">
+          <div class="inputform">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter username" />
+            <small>Error message</small>
+          </div>
+          <div class="inputform">
+            <label for="email">Email</label>
+            <input type="text" id="email" placeholder="Enter email" />
+            <small>Error message</small>
+          </div>
+          <div class="inputform">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter password" />
+            <small>Error message</small>
+          </div>
+          <div class="inputform">
+            <label for="password2">Confirm your password</label>
+            <input
+              type="password"
+              id="password2"
+              placeholder="Enter password again"
+            />
+            <small>Error message</small>
+          </div>
+          <button type="submit" class="btn">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Sniglet&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+      }
+
+      :root {
+        --error-color: #da134e;
+        --success-color: #0d9b48;
+      }
+
+      body {
+        height: 100%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 30px;
+        background: #e6e9e9;
+        font-family: "Sniglet", cursive;
+      }
+
+      .container {
+        width: 400px;
+        padding: 15px;
+        border-radius: 15px;
+        border: 6px double #bbc0c0;
+        background: #ccc6cc;
+        color: #363f27;
+        box-shadow: 0px 0px 15px #ad9dad;
+      }
+
+      #form {
+        padding: 15px;
+      }
+
+      .formcontainer h1 {
+        margin-bottom: 5px;
+        text-align: center;
+        font-size: 28px;
+        letter-spacing: 2px;
+      }
+
+      .formcontainer .inputform label {
+        display: block;
+      }
+
+      .formcontainer .inputform input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 15px;
+        font-size: 14px;
+        letter-spacing: 3px;
+        border: 2px solid #ced8d8;
+      }
+
+      .formcontainer .inputform input:focus {
+        border-color: #9ec7c7;
+      }
+
+      .formcontainer .inputform.success input {
+        border-color: var(--success-color);
+      }
+
+      .formcontainer .inputform.error input {
+        border-color: var(--error-color);
+      }
+
+      .formcontainer .inputform small {
+        color: var(--error-color);
+        visibility: hidden;
+      }
+
+      .inputform.error small {
+        visibility: visible;
+      }
+
+      .formcontainer button {
+        width: 50%;
+        margin-top: 20px;
+        margin-left: 80px;
+        padding: 10px;
+        display: block;
+        font-size: 25px;
+        letter-spacing: 2px;
+        border-radius: 15px;
+        border: 2px solid #7f2caf;
+        cursor: pointer;
+        background: #8e31c4;
+        color: #ffffff;
+      }
+
+      .formcontainer button:hover {
+        background: #a15bca;
+        border: 2px solid #9050b4;
+      }
+    </style>
+
+    <script>
+      const username = document.getElementById("username");
+      const useremail = document.getElementById("email");
+      const password = document.getElementById("password");
+      const password2 = document.getElementById("password2");
+
+      function validate(e) {
+        checkRequired([username, useremail, password, password2]);
+        checkLength(username, 6, 15);
+        checkLength(password, 8, 25);
+        checkEmail(useremail);
+        checkPasswordsMatch(password, password2);
+        e.preventDefault();
+      }
+
+      function checkRequired(inputArr) {
+        inputArr.forEach(function (input) {
+          if (input.value.trim() === "") {
+            showError(input, `${getFieldName(input)} is required`);
+          } else {
+            showSuccess(input);
+          }
+        });
+      }
+
+      function getFieldName(input) {
+        return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+      }
+
+      function checkLength(input, min, max) {
+        if (input.value.length < min) {
+          showError(
+            input,
+            `${getFieldName(input)} must be at least ${min} characters`
+          );
+        } else if (input.value.length > max) {
+          showError(
+            input,
+            `${getFieldName(input)} must be less than ${max} characters`
+          );
+        } else {
+          showSuccess(input);
+        }
+      }
+
+      function checkPasswordsMatch(input1, input2) {
+        if (input1.value !== input2.value) {
+          showError(input2, "Passwords don't match");
+        }
+      }
+
+      function showError(input, message) {
+        const formControl = input.parentElement;
+        formControl.className = "inputform error";
+        const small = formControl.querySelector("small");
+        small.innerText = message;
+      }
+      function showSuccess(input) {
+        const formControl = input.parentElement;
+        formControl.className = "inputform success";
+      }
+
+      function checkEmail(input) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (re.test(input.value.trim())) {
+          showSuccess(input);
+        } else {
+          showError(input, "Invalid email");
+        }
+      }
+
+      document.getElementById("form").addEventListener("submit", validate);
+      65;
+    </script>
+  </body>
+</html>
